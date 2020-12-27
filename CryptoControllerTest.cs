@@ -48,8 +48,8 @@ namespace VSapi.Tests
             await using (var context = new ApiContext(options, null))
             {
                 var controller = new CryptoController(context);
-                cryptoExist = controller.Get();
-                crypto = controller.Get() as OkObjectResult; 
+                cryptoExist = controller.Get(2);
+                crypto = controller.Get(2) as OkObjectResult; 
             }
             #endregion
 
