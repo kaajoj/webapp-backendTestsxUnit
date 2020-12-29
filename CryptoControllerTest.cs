@@ -5,10 +5,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Moq;
 using VSApi.Controllers;
+using VSApi.Data;
 using VSApi.Models;
+using VSApi.Services;
 using Xunit;
 
-namespace VSapi.Tests
+namespace VSApi.Tests
 {
     public class CryptoControllerTest
     {
@@ -47,7 +49,7 @@ namespace VSapi.Tests
 
             await using (var context = new ApiContext(options, null))
             {
-                var controller = new CryptoController(context);
+                var controller = new CryptoController(new CryptoRepository(context), new CoinMarketCapApiService());
                 cryptoExist = controller.Get(2);
                 crypto = controller.Get(2) as OkObjectResult; 
             }
@@ -61,25 +63,25 @@ namespace VSapi.Tests
 
 
         // Test  GetCmcApi() method
-        [Fact]
-        public async void GetCmcApi()
-        {
-
-        }
+        // [Fact]
+        // public async void GetCmcApi()
+        // {
+        //
+        // }
 
         // Test  Post() method
-        [Fact]
-        public async void Post()
-        {
-
-        }
+        // [Fact]
+        // public async void Post()
+        // {
+        //
+        // }
 
         // Test  Edit(int? id, int flag) method
-        [Fact]
-        public async void Edit()
-        {
-
-        }
+        // [Fact]
+        // public async void Edit()
+        // {
+        //
+        // }
 
 
     }
