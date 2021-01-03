@@ -1,8 +1,7 @@
+using System;
 using System.Threading.Tasks;
-using IdentityServer4.EntityFramework.Options;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using Moq;
 using VSApi.Controllers;
 using VSApi.Data;
@@ -12,64 +11,58 @@ using Xunit;
 
 namespace VSApi.Tests
 {
-    public class CryptoControllerTest
+    public class CryptoControllerTest : IClassFixture<ContextFixture>
     {
-        // Test Get() method
+        private readonly ContextFixture _contextFixture;
+
+        public CryptoControllerTest(ContextFixture contextFixture)
+        {
+            _contextFixture = contextFixture;
+        }
+
         [Fact]
-        public async void Get()
+        public void GivenCryptoFoundThenItShouldReturnCrypto()
         {
             #region Arrange
-            var options = new DbContextOptionsBuilder<ApiContext>()
-                .UseInMemoryDatabase(databaseName: "WebApp")
-                .Options;
-
-            var operationalStoreOptions = Options.Create(new OperationalStoreOptions());
-
-            await using (var context = new ApiContext(options, operationalStoreOptions))
-            {
-                context.Add(new Crypto()
-                {
-                    Rank = 2,
-                    Name = "Test",
-                    Symbol = "XYZ",
-                    Price = "1234,99",
-                    Change24h = null,
-                    Change7d = null,
-                    OwnFlag = 0
-                });
-                await context.SaveChangesAsync();
-            }
-
-            IActionResult cryptoExist;
-            OkObjectResult crypto;
-
+            var controller = new CryptoController(new CryptoRepository(_contextFixture.ApiContext), new CoinMarketCapApiService());
             #endregion
 
             #region Act
-
-            await using (var context = new ApiContext(options, null))
-            {
-                var controller = new CryptoController(new CryptoRepository(context), new CoinMarketCapApiService());
-                cryptoExist = controller.Get(2);
-                crypto = controller.Get(2) as OkObjectResult; 
-            }
+            var cryptoExists = controller.Get(1) as OkObjectResult;
+            var cryptoExistsValue = cryptoExists.Value as Crypto;
             #endregion
 
             #region Assert
-            Assert.NotNull(cryptoExist);
-            Assert.Equal("200", crypto.StatusCode.Value.ToString());
+            Assert.NotNull(cryptoExists);
+            Assert.Equal(1, cryptoExistsValue.Id);
+            Assert.Equal(2, cryptoExistsValue.Rank);
+            Assert.Equal("Test", cryptoExistsValue.Name);
             #endregion
         }
 
+        [Fact]
+        public void GivenCryptoNotFound()
+        {
+            #region Arrange
+            var controller = new CryptoController(new CryptoRepository(_contextFixture.ApiContext), new CoinMarketCapApiService());
+            #endregion
 
-        // Test  GetCmcApi() method
+            #region Act
+            var cryptoNotExists = controller.Get(-1) as OkObjectResult;
+            var cryptoNotExistsValue = cryptoNotExists.Value as Crypto;
+            #endregion
+
+            #region Assert
+            Assert.Null(cryptoNotExistsValue);
+            #endregion
+        }
+
         // [Fact]
         // public async void GetCmcApi()
         // {
         //
         // }
 
-        // Test  Post() method
         // [Fact]
         // public async void Post()
         // {
@@ -82,7 +75,5 @@ namespace VSApi.Tests
         // {
         //
         // }
-
-
     }
 }
