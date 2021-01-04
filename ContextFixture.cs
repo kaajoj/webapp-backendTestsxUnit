@@ -34,6 +34,26 @@ namespace VSApi.Tests
                     Change24h = null,
                     Change7d = null,
                     OwnFlag = 0
+                }); 
+                ApiContext.Add(new Crypto()
+                {
+                    Rank = 4,
+                    Name = "Test2",
+                    Symbol = "ABC",
+                    Price = "789,00",
+                    Change24h = "10",
+                    Change7d = "20",
+                    OwnFlag = 1
+                });
+                ApiContext.Add(new Crypto()
+                {
+                    Rank = 7,
+                    Name = "Test3",
+                    Symbol = "12C",
+                    Price = "51,00",
+                    Change24h = "-10",
+                    Change7d = "-20",
+                    OwnFlag = 0
                 });
                 ApiContext.SaveChanges();
             }
