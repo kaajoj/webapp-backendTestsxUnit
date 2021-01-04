@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -18,6 +19,23 @@ namespace VSApi.Tests
         public CryptoControllerTest(ContextFixture contextFixture)
         {
             _contextFixture = contextFixture;
+        }
+
+        [Fact]
+        public void ItShouldReturnCryptos()
+        {
+            #region Arrange
+            var controller = new CryptoController(new CryptoRepository(_contextFixture.ApiContext), new CoinMarketCapApiService());
+            #endregion
+
+            #region Act
+            var response = controller.Get() as OkObjectResult;
+            var cryptos = response.Value as IOrderedEnumerable<Crypto>;
+            #endregion
+
+            #region Assert
+            Assert.Equal(3, cryptos.Count());
+            #endregion
         }
 
         [Fact]
