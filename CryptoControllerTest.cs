@@ -25,11 +25,11 @@ namespace VSApi.Tests
         public void ItShouldReturnCryptos()
         {
             #region Arrange
-            var controller = new CryptoController(new CryptoRepository(_contextFixture.ApiContext), new CoinMarketCapApiService());
+            var cryptoController = new CryptoController(new CryptoRepository(_contextFixture.ApiContext), new CoinMarketCapApiService());
             #endregion
 
             #region Act
-            var response = controller.Get() as OkObjectResult;
+            var response = cryptoController.Get() as OkObjectResult;
             var cryptos = response.Value as IOrderedEnumerable<Crypto>;
             #endregion
 
@@ -42,11 +42,11 @@ namespace VSApi.Tests
         public void GivenCryptoFoundThenItShouldReturnCrypto()
         {
             #region Arrange
-            var controller = new CryptoController(new CryptoRepository(_contextFixture.ApiContext), new CoinMarketCapApiService());
+            var cryptoController = new CryptoController(new CryptoRepository(_contextFixture.ApiContext), new CoinMarketCapApiService());
             #endregion
 
             #region Act
-            var cryptoExists = controller.Get(1) as OkObjectResult;
+            var cryptoExists = cryptoController.Get(1) as OkObjectResult;
             var cryptoExistsValue = cryptoExists.Value as Crypto;
             #endregion
 
@@ -62,11 +62,11 @@ namespace VSApi.Tests
         public void GivenCryptoNotFound()
         {
             #region Arrange
-            var controller = new CryptoController(new CryptoRepository(_contextFixture.ApiContext), new CoinMarketCapApiService());
+            var cryptoController = new CryptoController(new CryptoRepository(_contextFixture.ApiContext), new CoinMarketCapApiService());
             #endregion
 
             #region Act
-            var cryptoNotExists = controller.Get(-1) as OkObjectResult;
+            var cryptoNotExists = cryptoController.Get(-1) as OkObjectResult;
             var cryptoNotExistsValue = cryptoNotExists.Value as Crypto;
             #endregion
 
