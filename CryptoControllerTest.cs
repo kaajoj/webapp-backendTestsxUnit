@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -75,11 +76,22 @@ namespace VSApi.Tests
             #endregion
         }
 
-        // [Fact]
-        // public async void GetCmcApi()
-        // {
-        //
-        // }
+        [Fact]
+        public async void ItShouldReturnCryptosFromCmcApi()
+        {
+            #region Arrange
+            var cryptoController = new CryptoController(new CryptoRepository(_contextFixture.ApiContext), new CoinMarketCapApiService());
+            #endregion
+
+            #region Act
+            var response = await cryptoController.GetCmcApi() as OkObjectResult;
+            var cmcCryptos = response.Value as List<Crypto>;
+            #endregion
+
+            #region Assert
+            Assert.Equal(15, cmcCryptos.Count());
+            #endregion
+        }
 
         // [Fact]
         // public async void Post()
