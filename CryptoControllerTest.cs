@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Moq;
 using VSApi.Controllers;
 using VSApi.Data;
+using VSApi.Interfaces;
 using VSApi.Models;
 using VSApi.Services;
 using Xunit;
@@ -15,18 +16,20 @@ namespace VSApi.Tests
 {
     public class CryptoControllerTest : IClassFixture<ContextFixture>
     {
-        private readonly ContextFixture _contextFixture;
+        private readonly ICryptoRepository _cryptoRepository;
+        private readonly CoinMarketCapApiService _coinMarketCapApiService;
 
         public CryptoControllerTest(ContextFixture contextFixture)
         {
-            _contextFixture = contextFixture;
+            _cryptoRepository = new CryptoRepository(contextFixture.ApiContext);
+            _coinMarketCapApiService = new CoinMarketCapApiService(_cryptoRepository);
         }
 
         [Fact]
         public void ItShouldReturnCryptos()
         {
             #region Arrange
-            var cryptoController = new CryptoController(new CryptoRepository(_contextFixture.ApiContext), new CoinMarketCapApiService());
+            var cryptoController = new CryptoController(_cryptoRepository, _coinMarketCapApiService);
             #endregion
 
             #region Act
@@ -43,7 +46,7 @@ namespace VSApi.Tests
         public void GivenCryptoFoundThenItShouldReturnCrypto()
         {
             #region Arrange
-            var cryptoController = new CryptoController(new CryptoRepository(_contextFixture.ApiContext), new CoinMarketCapApiService());
+            var cryptoController = new CryptoController(_cryptoRepository, _coinMarketCapApiService);
             #endregion
 
             #region Act
@@ -63,7 +66,7 @@ namespace VSApi.Tests
         public void GivenCryptoNotFound()
         {
             #region Arrange
-            var cryptoController = new CryptoController(new CryptoRepository(_contextFixture.ApiContext), new CoinMarketCapApiService());
+            var cryptoController = new CryptoController(_cryptoRepository, _coinMarketCapApiService);
             #endregion
 
             #region Act
@@ -80,7 +83,7 @@ namespace VSApi.Tests
         public async void ItShouldReturnCryptosFromCmcApi()
         {
             #region Arrange
-            var cryptoController = new CryptoController(new CryptoRepository(_contextFixture.ApiContext), new CoinMarketCapApiService());
+            var cryptoController = new CryptoController(_cryptoRepository, _coinMarketCapApiService);
             #endregion
 
             #region Act
