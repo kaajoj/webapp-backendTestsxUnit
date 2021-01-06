@@ -98,11 +98,38 @@ namespace VSApi.Tests
             #endregion
         }
 
-        // [Fact]
-        // public async void Post()
-        // {
-        //
-        // }
+        [Fact]
+        public async void GivenCryptoAddedThenItShouldReturnCryptosInfo()
+        {
+            #region Arrange
+            var cryptoController = new CryptoController(_cryptoRepository, _cryptoService, _coinMarketCapApiService);
+            #endregion
+
+            #region Act
+            var crypto = new Crypto()
+            {
+                Rank = 10,
+                Name = "TestPost",
+                Symbol = "POST",
+                Price = "100,00",
+                Change24h = "0",
+                Change7d = "0",
+                OwnFlag = 0
+            };
+
+            var postResponse = await cryptoController.Post(crypto) as CreatedAtRouteResult;
+            var cryptoAdded = postResponse.Value as Crypto;
+
+            var response = cryptoController.Get() as OkObjectResult;
+            var cryptos = response.Value as IEnumerable<Crypto>;
+            #endregion
+
+            #region Assert
+            Assert.Equal(10, cryptoAdded.Rank);
+            Assert.Equal("TestPost", cryptoAdded.Name);
+            Assert.Equal(4, cryptos.Count());
+            #endregion
+        }
 
         // Test  Edit(int? id, int flag) method
         // [Fact]
