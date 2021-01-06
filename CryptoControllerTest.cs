@@ -16,26 +16,22 @@ namespace VSApi.Tests
 {
     public class CryptoControllerTest : IClassFixture<ContextFixture>
     {
-        private readonly ICryptoRepository _cryptoRepository;
-        private readonly ICoinMarketCapApiService _coinMarketCapApiService;
-        private readonly ICryptoService _cryptoService;
+        private readonly CryptoController _cryptoController;
 
         public CryptoControllerTest(ContextFixture contextFixture)
         {
-            _cryptoRepository = new CryptoRepository(contextFixture.ApiContext);
-            _cryptoService = new CryptoService(_cryptoRepository);
-            _coinMarketCapApiService = new CoinMarketCapApiService(_cryptoRepository);
+            var cryptoRepository = new CryptoRepository(contextFixture.ApiContext);
+            var cryptoService = new CryptoService(cryptoRepository);
+            var coinMarketCapApiService = new CoinMarketCapApiService(cryptoRepository);
+            
+            _cryptoController = new CryptoController(cryptoService, coinMarketCapApiService);
         }
 
         [Fact]
         public void ItShouldReturnCryptos()
         {
-            #region Arrange
-            var cryptoController = new CryptoController(_cryptoService, _coinMarketCapApiService);
-            #endregion
-
             #region Act
-            var response = cryptoController.Get() as OkObjectResult;
+            var response = _cryptoController.Get() as OkObjectResult;
             var cryptos = response.Value as IEnumerable<Crypto>;
             #endregion
 
@@ -47,12 +43,8 @@ namespace VSApi.Tests
         [Fact]
         public void GivenCryptoFoundThenItShouldReturnCrypto()
         {
-            #region Arrange
-            var cryptoController = new CryptoController(_cryptoService, _coinMarketCapApiService);
-            #endregion
-
             #region Act
-            var cryptoExists = cryptoController.Get(1) as OkObjectResult;
+            var cryptoExists = _cryptoController.Get(1) as OkObjectResult;
             var cryptoExistsValue = cryptoExists.Value as Crypto;
             #endregion
 
@@ -67,12 +59,8 @@ namespace VSApi.Tests
         [Fact]
         public void GivenCryptoNotFound()
         {
-            #region Arrange
-            var cryptoController = new CryptoController(_cryptoService, _coinMarketCapApiService);
-            #endregion
-
             #region Act
-            var cryptoNotExists = cryptoController.Get(-1) as OkObjectResult;
+            var cryptoNotExists = _cryptoController.Get(-1) as OkObjectResult;
             var cryptoNotExistsValue = cryptoNotExists.Value as Crypto;
             #endregion
 
@@ -84,12 +72,8 @@ namespace VSApi.Tests
         [Fact]
         public async void ItShouldReturnCryptosFromCmcApi()
         {
-            #region Arrange
-            var cryptoController = new CryptoController(_cryptoService, _coinMarketCapApiService);
-            #endregion
-
             #region Act
-            var response = await cryptoController.GetCmcApi() as OkObjectResult;
+            var response = await _cryptoController.GetCmcApi() as OkObjectResult;
             var cmcCryptos = response.Value as List<Crypto>;
             #endregion
 
@@ -102,10 +86,6 @@ namespace VSApi.Tests
         public async void GivenCryptoAddedThenItShouldReturnCryptosInfo()
         {
             #region Arrange
-            var cryptoController = new CryptoController(_cryptoService, _coinMarketCapApiService);
-            #endregion
-
-            #region Act
             var crypto = new Crypto()
             {
                 Rank = 10,
@@ -116,11 +96,13 @@ namespace VSApi.Tests
                 Change7d = "0",
                 OwnFlag = 0
             };
+            #endregion
 
-            var postResponse = await cryptoController.Post(crypto) as CreatedAtRouteResult;
+            #region Act
+            var postResponse = await _cryptoController.Post(crypto) as CreatedAtRouteResult;
             var cryptoAdded = postResponse.Value as Crypto;
 
-            var response = cryptoController.Get() as OkObjectResult;
+            var response = _cryptoController.Get() as OkObjectResult;
             var cryptos = response.Value as IEnumerable<Crypto>;
             #endregion
 
@@ -134,15 +116,11 @@ namespace VSApi.Tests
         [Fact]
         public async void GivenCryptoFoundByIdThenItShouldReturnUpdatedCryptoWithSelectedOwnFlag()
         {
-            #region Arrange
-            var cryptoController = new CryptoController(_cryptoService, _coinMarketCapApiService);
-            #endregion
-
             #region Act
-            var cryptoWithOwnFlag0 = await cryptoController.Edit(2, 1) as OkObjectResult;
+            var cryptoWithOwnFlag0 = await _cryptoController.Edit(2, 1) as OkObjectResult;
             var cryptoWithOwnFlag0SetTo1 = cryptoWithOwnFlag0.Value as Crypto;
 
-            var cryptoWithOwnFlag1 = await cryptoController.Edit(4, 0) as OkObjectResult;
+            var cryptoWithOwnFlag1 = await _cryptoController.Edit(4, 0) as OkObjectResult;
             var cryptoWithOwnFlag1SetTo0 = cryptoWithOwnFlag1.Value as Crypto;
             #endregion
 
