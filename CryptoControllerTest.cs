@@ -41,7 +41,7 @@ namespace VSApi.Tests
         }
 
         [Fact]
-        public void GivenCryptoFoundThenItShouldReturnCrypto()
+        public void GivenCryptoFound_ThenItShouldReturnCrypto()
         {
             #region Act
             var cryptoExists = _cryptoController.Get(1) as OkObjectResult;
@@ -83,7 +83,7 @@ namespace VSApi.Tests
         }
 
         [Fact]
-        public async void GivenCryptoAddedThenItShouldReturnCryptosInfo()
+        public async void GivenCryptoAdded_ThenItShouldReturnCryptosInfo()
         {
             #region Arrange
             var crypto = new Crypto()
@@ -114,7 +114,7 @@ namespace VSApi.Tests
         }
 
         [Fact]
-        public async void GivenCryptoFoundByIdThenItShouldReturnUpdatedCryptoWithSelectedOwnFlag()
+        public async void GivenCryptoFoundById_ThenItShouldReturnUpdatedCrypto_WithSelectedOwnFlag()
         {
             #region Act
             var cryptoWithOwnFlag0 = await _cryptoController.Edit(2, 1) as OkObjectResult;
