@@ -131,11 +131,26 @@ namespace VSApi.Tests
             #endregion
         }
 
-        // Test  Edit(int? id, int flag) method
-        // [Fact]
-        // public async void Edit()
-        // {
-        //
-        // }
+        [Fact]
+        public async void GivenCryptoFoundByIdThenItShouldReturnUpdatedCryptoWithSelectedOwnFlag()
+        {
+            #region Arrange
+            var cryptoController = new CryptoController(_cryptoRepository, _cryptoService, _coinMarketCapApiService);
+            #endregion
+
+            #region Act
+            var cryptoWithOwnFlag0 = cryptoController.Edit(2, 1) as OkObjectResult;
+            var cryptoWithOwnFlag0SetTo1 = cryptoWithOwnFlag0.Value as Crypto;
+
+            var cryptoWithOwnFlag1 = cryptoController.Edit(4, 0) as OkObjectResult;
+            var cryptoWithOwnFlag1SetTo0 = cryptoWithOwnFlag1.Value as Crypto;
+            #endregion
+
+            #region Assert
+            Assert.True(true);
+            Assert.Equal(1, cryptoWithOwnFlag0SetTo1.OwnFlag);
+            Assert.Equal(0, cryptoWithOwnFlag1SetTo0.OwnFlag);
+            #endregion
+        }
     }
 }
