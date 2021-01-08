@@ -35,11 +35,10 @@ namespace VSApi.Tests
         {
             #region Arrange
             var response = _coinMarketCapApiService.CmcGet();
-            dynamic jsonObj = JObject.Parse(response);
             #endregion
 
             #region Act
-            var cryptoTemp = _coinMarketCapApiService.CmcJsonParse(jsonObj, 0);
+            var cryptoTemp = _coinMarketCapApiService.CmcJsonParse(response, 0);
             #endregion
 
             #region Assert
