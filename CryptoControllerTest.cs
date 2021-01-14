@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Moq;
 using VSApi.Controllers;
 using VSApi.Data;
@@ -22,7 +23,7 @@ namespace VSApi.Tests
         {
             var cryptoRepository = new CryptoRepository(contextFixture.ApiContext);
             var cryptoService = new CryptoService(cryptoRepository);
-            var coinMarketCapApiService = new CoinMarketCapApiService(cryptoRepository);
+            var coinMarketCapApiService = new CoinMarketCapApiService(cryptoRepository, contextFixture.Configuration);
             
             _cryptoController = new CryptoController(cryptoService, coinMarketCapApiService);
         }

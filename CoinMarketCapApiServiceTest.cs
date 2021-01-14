@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json.Linq;
 using VSApi.Data;
 using VSApi.Services;
@@ -15,7 +16,7 @@ namespace VSApi.Tests
         public CoinMarketCapApiServiceTest(ContextFixture contextFixture)
         {
             var cryptoRepository = new CryptoRepository(contextFixture.ApiContext);
-            _coinMarketCapApiService = new CoinMarketCapApiService(cryptoRepository);
+            _coinMarketCapApiService = new CoinMarketCapApiService(cryptoRepository, contextFixture.Configuration);
         }
 
         [Fact]

@@ -4,7 +4,9 @@ using System.Linq;
 using System.Text;
 using IdentityServer4.EntityFramework.Options;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
+using Moq;
 using VSApi.Data;
 using VSApi.Models;
 
@@ -12,9 +14,15 @@ namespace VSApi.Tests
 {
     public class ContextFixture : IDisposable
     {
+        public IConfiguration Configuration { get; }
         public ApiContext ApiContext { get; }
+
         public ContextFixture()
         {
+            Mock<IConfiguration> mockConfiguration = new Mock<IConfiguration>();
+            mockConfiguration.SetupGet(x => x[It.Is<string>(s => s == "CMCApiKey")]).Returns("test");
+            Configuration = mockConfiguration.Object;
+
             var options = new DbContextOptionsBuilder<ApiContext>()
                 .UseInMemoryDatabase(databaseName: "WebApp")
                 .Options;
