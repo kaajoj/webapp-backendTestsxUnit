@@ -94,7 +94,6 @@ namespace VSApi.Tests
                 Price = "100,00",
                 Change24h = "0",
                 Change7d = "0",
-                OwnFlag = 0
             };
             #endregion
 
@@ -113,21 +112,21 @@ namespace VSApi.Tests
             #endregion
         }
 
-        [Fact]
+        [Fact(Skip = "OwnFlag function removed for now")]
         public async void GivenCryptoFoundById_ThenItShouldReturnUpdatedCrypto_WithSelectedOwnFlag()
         {
             #region Act
-            var cryptoWithOwnFlag0 = await _cryptoController.Edit(2, 1) as OkObjectResult;
-            var cryptoWithOwnFlag0SetTo1 = cryptoWithOwnFlag0.Value as Crypto;
+            // var cryptoWithOwnFlag0 = await _cryptoController.Edit(2, 1) as OkObjectResult;
+            // var cryptoWithOwnFlag0SetTo1 = cryptoWithOwnFlag0.Value as Crypto;
 
-            var cryptoWithOwnFlag1 = await _cryptoController.Edit(4, 0) as OkObjectResult;
-            var cryptoWithOwnFlag1SetTo0 = cryptoWithOwnFlag1.Value as Crypto;
+            // var cryptoWithOwnFlag1 = await _cryptoController.Edit(4, 0) as OkObjectResult;
+            // var cryptoWithOwnFlag1SetTo0 = cryptoWithOwnFlag1.Value as Crypto;
             #endregion
 
             #region Assert
             Assert.True(true);
-            Assert.Equal(1, cryptoWithOwnFlag0SetTo1.OwnFlag);
-            Assert.Equal(0, cryptoWithOwnFlag1SetTo0.OwnFlag);
+            // Assert.Equal(1, cryptoWithOwnFlag0SetTo1.OwnFlag);
+            // Assert.Equal(0, cryptoWithOwnFlag1SetTo0.OwnFlag);
             #endregion
         }
     }

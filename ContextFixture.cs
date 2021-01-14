@@ -33,7 +33,6 @@ namespace VSApi.Tests
                     Price = "1234,99",
                     Change24h = null,
                     Change7d = null,
-                    OwnFlag = 0
                 }); 
                 ApiContext.Add(new Crypto()
                 {
@@ -43,7 +42,6 @@ namespace VSApi.Tests
                     Price = "789,00",
                     Change24h = "10",
                     Change7d = "20",
-                    OwnFlag = 1
                 });
                 ApiContext.Add(new Crypto()
                 {
@@ -53,7 +51,6 @@ namespace VSApi.Tests
                     Price = "51,00",
                     Change24h = "-10",
                     Change7d = "-20",
-                    OwnFlag = 0
                 });
                 ApiContext.SaveChanges();
             }
