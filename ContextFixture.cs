@@ -19,7 +19,7 @@ namespace VSApi.Tests
 
         public ContextFixture()
         {
-            Mock<IConfiguration> mockConfiguration = new Mock<IConfiguration>();
+            var mockConfiguration = new Mock<IConfiguration>();
             mockConfiguration.SetupGet(x => x[It.Is<string>(s => s == "CMCApiKey")]).Returns("test");
             Configuration = mockConfiguration.Object;
 

@@ -71,7 +71,7 @@ namespace VSApi.Tests
         }
 
         [Fact]
-        public async void ItShouldReturnCryptosFromCmcApi()
+        public async Task ItShouldReturnCryptosFromCmcApi()
         {
             #region Act
             var response = await _cryptoController.GetCmcApi() as OkObjectResult;
@@ -84,7 +84,7 @@ namespace VSApi.Tests
         }
 
         [Fact]
-        public async void GivenCryptoAdded_ThenItShouldReturnCryptosInfo()
+        public async Task GivenCryptoAdded_ThenItShouldReturnCryptosInfo()
         {
             #region Arrange
             var crypto = new Crypto()
@@ -114,7 +114,7 @@ namespace VSApi.Tests
         }
 
         [Fact(Skip = "OwnFlag function removed for now")]
-        public async void GivenCryptoFoundById_ThenItShouldReturnUpdatedCrypto_WithSelectedOwnFlag()
+        public async Task GivenCryptoFoundById_ThenItShouldReturnUpdatedCrypto_WithSelectedOwnFlag()
         {
             #region Act
             // var cryptoWithOwnFlag0 = await _cryptoController.Edit(2, 1) as OkObjectResult;
@@ -125,7 +125,7 @@ namespace VSApi.Tests
             #endregion
 
             #region Assert
-            Assert.True(true);
+            // Assert.True(true);
             // Assert.Equal(1, cryptoWithOwnFlag0SetTo1.OwnFlag);
             // Assert.Equal(0, cryptoWithOwnFlag1SetTo0.OwnFlag);
             #endregion
